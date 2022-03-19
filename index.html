@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Rock, Paper, Scissors!</title>
+    <meta charset="utf-8">
+  </head>
+
+  <body>
+    <h1>Have fun playing!</h1>
+  </body>
+
+  <script>
+
+    const validPLays = ['rock', 'paper', 'scissors'];
+  
+    const NumToPlay = {
+      1 : "rock",
+      2 : "paper",
+      3 : "scissors"
+    };
+
+    function computerPlay() {
+      return NumToPlay[Math.floor(Math.random() * 3) + 1];
+    }
+
+    // function playStats(n = 100) {
+    //   let stat= {
+    //     "rock" : 0,
+    //     "paper" : 0,
+    //     "scissors" : 0
+    //   };
+
+    //   for (let i = 0; i < n; ++i) {
+    //     stat[computerPlay()]++;
+    //   }
+
+    //   console.log("rock: " + stat["rock"]);
+    //   console.log("paper: " + stat["paper"]);
+    //   console.log("scissors: " + stat["scissors"]);
+    // }
+
+    function determineRoundOutcome(playerSelection, computerSelection) {
+
+      if (playerSelection === computerSelection) {
+        return 'tie'
+      }
+    
+      if ((playerSelection === 'rock' && computerSelection === 'paper') ||
+          (playerSelection === 'paper' && computerSelection === 'scissors') ||
+          (playerSelection === 'scissors' && computerSelection === 'rock')) {
+
+        return 'lose'
+      }
+
+      return 'win'
+    }
+
+  
+    function playRound(playerSelection, computerSelection) {
+
+      const outcome = determineRoundOutcome(playerSelection, computerSelection);
+      
+      {
+        let roundMsg = '';
+
+        if (outcome === 'tie') {
+          roundMsg = `Tie! ${playerSelection} against ${computerSelection}.`
+        } else if (outcome === 'lose') {
+          roundMsg = `You Lose! ${computerSelection} beats ${playerSelection}.`;
+        } else if (outcome === 'win') {
+          roundMsg = `You win! ${playerSelection} beats ${computerSelection}.`;
+        } else {
+          roundMsg = `Something went wrong! (player: ${playerSelection}, computer: ${computerSelection}).`
+        }
+
+        console.log(roundMsg);
+      }
+
+      return outcome;
+    }
+
+    function game() {
+      let playerScore = 0;
+      let computerScore = 0;
+      let outcomeText = '';
+    
+      for (let i = 0; i < 5; ++i) {
+        
+        let playerSelection = ''
+        let validInput = false;
+
+        let prefix = `Round ${i + 1}. Score [ ${playerScore} : ${computerScore} ]\n`;
+        while (!validInput) {
+          playerSelection = prompt(outcomeText + prefix + "Rock, Paper, Scissors?");
+          if (playerSelection === null || playerSelection === undefined) { return; }
+          playerSelection = playerSelection.toLowerCase();
+
+          validInput = validPLays.includes(playerSelection);
+        }
+
+        const computerSelection = computerPlay();
+
+        let outcome = playRound(playerSelection, computerSelection);
+
+        if (outcome === 'lose') {
+          ++computerScore;
+          outcomeText = 'You lost!\n';
+        } else if (outcome === 'win') {
+          ++playerScore;
+          outcomeText = 'You won!!!\n';
+        } else {
+          outcomeText = 'Tie!!\n';
+        }
+      }
+      
+      console.log(`Player Score: ${playerScore}, Computer Score: ${computerScore}`);
+
+      if (playerScore == computerScore) {
+        alert(`You tied! (${playerScore} : ${computerScore})`);
+      } else if (playerScore > computerScore) {
+        alert(`You beat the most advanced AI in civilization! (${playerScore} : ${computerScore})`);
+      } else {
+        alert(`You lost to the all mighty AI. (${playerScore} : ${computerScore})`);
+      }
+    }
+
+    // start program:
+    let continuePlaying = false;
+    do {
+        game()
+        continuePlaying = confirm("Play again?");
+    } while (continuePlaying)
+
+  </script>
+
+</html>
